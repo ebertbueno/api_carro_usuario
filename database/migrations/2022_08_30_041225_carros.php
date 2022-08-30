@@ -15,8 +15,8 @@ class Carros extends Migration
     {
         Schema::create('carros', function (Blueprint $table) {
             $table->id();
-            $table->integer('users_id');
             $table->string('hash_id', 250);
+            $table->integer('users_id')->nullable();
             $table->string('ativo', 1)->nullable();
             $table->string('tipo', 250)->nullable();
             $table->string('nome', 250)->nullable();
@@ -41,9 +41,7 @@ class Carros extends Migration
             $table->date('data_compra')->nullable();
             $table->longText('observacoes')->nullable();
             $table->timestamps();
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->softDeletes($column = 'deleted_at');
             $table->string('created_from', 250)->nullable();
             $table->string('updated_from', 250)->nullable();
             $table->string('deleted_from', 250)->nullable();

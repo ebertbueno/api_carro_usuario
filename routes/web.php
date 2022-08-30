@@ -13,54 +13,33 @@
 |
 */
 $router->get('/', function () {
-    return response()->json('Rota não encontrada', 404);
-});
-
-$router->get('/rotas', function () {
     return [
-        'rotas' => [
-            'GET' => [
-                '/users' => 'Lista os usuários',
-                '/users_dados' => 'lista os dados complementares de um determinado usuário',
-                '/carros' => 'lista todos os veículos',
-                '/carros/{id}' => 'lista todos os veículos de um determinado usuário',
-            ],
-            'POST' =>  [
-                '/users' => 'grava um novo usuário',
-                '/users/{id}' => 'atualiza um determinado usuário',
-                '/users_dados/{id}' => 'atualiza os dados de um usuário',
-                '/carros' => 'grava um novo veículo',
-                '/carros/{id}' => 'atualiza um veículo existente',
-                '/users_carros/{users_id}/{carro_id}' => 'associa / desasocia um veículo de um usuário',
-            ],
-            'DELETE' => [
-                '/users' => 'remove um usuário, seus dados, e seus veículos',
-                '/carros' => 'remove um determinado veículo',
-                '/carros_imagens/{id}' => 'remove uma imagem de um veículo',
-                '/carros_imagens/{id}/zera' => 'remove todas as imagens de um veículo',
-            ],
+        'USERS' => [
+            'get' => ['/users', '/users/{id}', '/users/carros/todos',],
+            'post' => ['/users', '/users/{id}', '/users/{id}/dados',],
+            'delete' => ['/users/{id}',],
+        ],
+        'CARROS' => [
+            'get' => ['/carros', '/carros/{id}',],
+            'post' => ['/carros', '/carros/{id}',],
+            'delete' => ['/carros/{id}',],
         ],
     ];
 });
 
 // rota de usuários
 $router->get('/users', 'Users\Users_Controller@index');
+$router->get('/users/{id}', 'Users\Users_Controller@show');
+$router->get('/users/carros/todos', 'Users\Users_Controller@users_carros');
 $router->post('/users', 'Users\Users_Controller@store');
 $router->post('/users/{id}', 'Users\Users_Controller@edit');
+$router->post('/users/{id}/dados', 'Users\Users_Controller@dados');
 $router->delete('/users/{id}', 'Users\Users_Controller@destroy');
-
-// // rota de dados de usuários
-$router->post('/users_dados/{id}', 'Users_Dados\Users_Dados_Controller@edit');
 
 // // rota de carros
 $router->get('/carros', 'Carros\Carros_Controller@index');
 $router->post('/carros', 'Carros\Carros_Controller@store');
+$router->get('/carros/{id}', 'Carros\Carros_Controller@show');
 $router->post('/carros/{id}', 'Carros\Carros_Controller@edit');
 $router->delete('/carros/{id}', 'Carros\Carros_Controller@destroy');
-
-// // rota de imagens de carros
-$router->get('/carros_imagens/{carro_id}', 'Carros_Imagens\Carros_Imagens_Controller@index');
-$router->post('/carros_imagens/{carro_id}', 'Carros_Imagens\Carros_Imagens_Controller@store');
-$router->delete('/carros_imagens/{id}', 'Carros_Imagens\Carros_Imagens_Controller@destroy');
-$router->delete('/carros_imagens/{carro_id}/zera', 'Carros_Imagens\Carros_Imagens_Controller@zera');
-$router->post('/users_carros/{users_id}/{carro_id}', 'Carros_Imagens\Carros_Imagens_Controller@associa_desasocia');
+$router->post('/carros/{users_id}/{carro_id}', 'Carros\Carros_Controller@users_carros');

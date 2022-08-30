@@ -25,9 +25,7 @@ class UsersDados extends Migration
             $table->string('cidade', 250)->nullable();
             $table->string('estado', 250)->nullable();
             $table->timestamps();
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->softDeletes($column = 'deleted_at');
             $table->string('created_from', 250)->nullable();
             $table->string('updated_from', 250)->nullable();
             $table->string('deleted_from', 250)->nullable();

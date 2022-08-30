@@ -17,11 +17,9 @@ class Users extends Migration
             $table->id();
             $table->string('name', 250);
             $table->string('email', 250);
-            $table->string('password', 250);
+            $table->string('password', 250)->nullable();
             $table->timestamps();
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->softDeletes($column = 'deleted_at');
             $table->string('created_from', 250)->nullable();
             $table->string('updated_from', 250)->nullable();
             $table->string('deleted_from', 250)->nullable();

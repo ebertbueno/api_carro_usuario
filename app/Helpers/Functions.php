@@ -1,37 +1,34 @@
 <?php
 
-namespace App\Helpers;
-
-class Functions
+function pegaIPUsuario()
 {
-    public function pegaIPUsuario()
-    {
-        $client  = @$_SERVER['HTTP_CLIENT_IP'];
-        $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
-        $remote  = $_SERVER['REMOTE_ADDR'];
+    $client  = @$_SERVER['HTTP_CLIENT_IP'];
+    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $remote  = $_SERVER['REMOTE_ADDR'];
 
-        if (filter_var($client, FILTER_VALIDATE_IP)) {
-            $ip = $client;
-        } elseif (filter_var($forward, FILTER_VALIDATE_IP)) {
-            $ip = $forward;
-        } else {
-            $ip = $remote;
-        }
-
-        return $ip;
+    if (filter_var($client, FILTER_VALIDATE_IP)) {
+        $ip = $client;
+    } elseif (filter_var($forward, FILTER_VALIDATE_IP)) {
+        $ip = $forward;
+    } else {
+        $ip = $remote;
     }
 
-    function Model($model)
-    {
-        $conexao = 'App\Models\\' . $model;
-        return new $conexao();
+    return $ip;
+}
+
+function Model($model)
+{
+    $conexao = 'App\Models\\' . $model;
+    return new $conexao();
+}
+
+function geraHashDados($data)
+{
+    if( is_array($data) ){
+        $data = json_encode($data);
     }
 
-    function criaDadosEssenciais($data)
-    {
-        Model('Gerenciamento', 'UsersDados')::create([
-            'users_id' => $data['id'],
-            'nivel' => $data['nivel'],
-        ]);
-    }
+    $hashMontado = hash_hmac('sha256', md5($data), rand());
+    return $hashMontado;
 }
